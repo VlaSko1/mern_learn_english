@@ -7,7 +7,7 @@ export const registration = async (name, email, password) => {
       email,
       password
     });
-    return response.data.message; 
+    return response.data;
   } catch (e) {
     return e.response?.data.message ? e.response.data.message : e.message;
   }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import { Button, Box, TextField, Typography } from '@mui/material';
 import { SnackbarError, SnackbarOk } from '../Snackbar';
 
-import { createSignUpWithThunk, getMessageSignUp, getMessageError } from '../../store/users';
+import { createSignUpWithThunk, getMessageSignUp, getMessageError, createSetError, createDelMessageSignUP } from '../../store/users';
 
 
 const CssTextField = styled(TextField)({
@@ -38,18 +38,19 @@ const RegistrationComp = () => {
   const [isSnackErrorOpen, setIsSnackErrorOpen] = useState(false);
   const [textSnackError, setTextSnackError] = useState('');
 
-  const closeSnackError = () => {
+  const closeSnackError = useCallback(() => {
     setIsSnackErrorOpen(false);
-  }
+    dispatch(createSetError(''));
+  }, [dispatch]);
 
   let messageSignUp = useSelector(getMessageSignUp);
   const [isSnackOkOpen, setIsSnackOkOpen] = useState(false);
   const [textSnackOk, setTextSnackOk] = useState('');
 
-  const closeSnackOk = () => {
+  const closeSnackOk = useCallback(() => {
     setIsSnackOkOpen(false);
-    setTextSnackOk('');
-  }
+    dispatch(createDelMessageSignUP());
+  }, [dispatch]);
 
   useEffect(() => {
     if (Boolean(messageSignUp)) {
@@ -59,7 +60,7 @@ const RegistrationComp = () => {
       closeSnackOk();
       setTextSnackOk('');
     }
-  }, [messageSignUp]);
+  }, [messageSignUp, closeSnackOk]);
 
 
   let messageError = useSelector(getMessageError);
@@ -72,7 +73,7 @@ const RegistrationComp = () => {
       closeSnackError();
       setTextSnackError('');
     }
-  }, [messageError]);
+  }, [messageError, closeSnackError]);
 
 
   
@@ -80,7 +81,6 @@ const RegistrationComp = () => {
   
   const changeName = (event) => {
     let text = event.target.value;
-    closeSnackError();
     closeSnackOk();
     if (text.search(/[^\w-]/g) !== -1) {
       setTextSnackError('Поле name может содержать только латинский буквы, цифры, дефис и символ подчёркивания!');
@@ -91,7 +91,6 @@ const RegistrationComp = () => {
   };
   const changeEmail = (event) => {
     let email = event.target.value;
-    closeSnackError();
     closeSnackOk();
     if (email.search(/[^\w.@_-]/g) !== -1) {
       setTextSnackError('Поле email может содержать только латинский буквы, цифры и символы: "@", "-", "_" или "." !');
@@ -102,7 +101,6 @@ const RegistrationComp = () => {
   };
   const changePassword = (event) => {
     let password = event.target.value;
-    closeSnackError();
     closeSnackOk();
     if (password.search(/[^0-9a-zA-Z@#^%$&*!]/g) !== -1) {
       setTextSnackError('Поле password может содержать только латинский буквы, цифры и символы: "@", "#", "^", "%", "$", "&", "*" или "!".');
@@ -112,7 +110,6 @@ const RegistrationComp = () => {
     setPassword(password);
   };
   const registrationCheck = () => {
-    closeSnackError();
     closeSnackOk();
     let nameReg = /^[\w-]{3,20}/;
     let emailReg = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;

@@ -1,4 +1,4 @@
-import { SIGN_UP, LOG_IN, LOG_OUT, SET_ERROR } from ".";
+import { SIGN_UP, LOG_IN, LOG_OUT, SET_ERROR,  DEL_MESSAGE_SIGN_UP } from ".";
 
 const defaultState = {
   currentUser: {},
@@ -27,7 +27,11 @@ export const usersReducer = (state = defaultState, action) => {
         messageSignUp: action.payload
 
       }
-
+    case DEL_MESSAGE_SIGN_UP :
+      return {
+        ...state, 
+        messageSignUp: ''
+      }
 
     default: 
       return state;
