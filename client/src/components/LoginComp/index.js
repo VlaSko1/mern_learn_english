@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import { Button, Box, TextField, Typography } from '@mui/material';
 import { SnackbarError } from '../Snackbar';
 
-import { createSignInWithThunk, createSetError} from '../../store/users';
+import { createSignInWithThunk, getMessageError} from '../../store/users';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -39,6 +39,21 @@ const LoginComp = () => {
   const closeSnackError = () => {
     setIsSnackErrorOpen(false);
   }
+
+  let messageError = useSelector(getMessageError);
+
+  useEffect(() => {
+    if (Boolean(messageError)) {
+      setTextSnackError(messageError);
+      setIsSnackErrorOpen(true);
+    } else {
+      closeSnackError();
+      setTextSnackError('');
+    }
+  }, [messageError]);
+
+
+
   const changeEmail = (event) => {
     let email = event.target.value;
     closeSnackError();

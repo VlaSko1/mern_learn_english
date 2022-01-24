@@ -21,6 +21,6 @@ export const login = async (email, password) => {
     });
     return response.data;
   } catch (e) {
-    return e;
+    return e.response?.data.message ? e.response.data.message : e.message;
   }
 }

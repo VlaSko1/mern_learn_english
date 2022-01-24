@@ -30,8 +30,13 @@ export const createSignInWithThunk = (email, password) => async (dispatch) => {
   
   try {
     const dataUser = await login(email, password); 
-    console.log(dataUser);
-    dispatch(createLogIn(dataUser));
+    if (typeof dataUser === "string") {
+      dispatch(createSetError(dataUser));
+    } else if ('user' in dataUser ) {
+      dispatch(createLogIn(dataUser));
+    } else {
+      dispatch(createSetError(dataUser.message));
+    }
     
   } catch (error) {
     dispatch(createSetError(error.message));

@@ -23,7 +23,7 @@ router.post('/registration', //TODO подправь валидацию в со�
       const errors = validationResult(req).formatWith(errorFormatter);
       
       if (!errors.isEmpty()) {
-        let string = errors.errors.reduce((ack, elem) => ack + elem.msg + ' ', "");
+        let string = errors.errors.reduce((ack, elem) => ack + elem.msg + ' ', "").slice(0, -1);
 
         return res.status(400).json({ message: string });
       }
@@ -58,11 +58,23 @@ router.post('/registration', //TODO подправь валидацию в со�
 
 router.post('/login',
   [
-    check('email', "Uncorrect email").isEmail(),
-    check('password', "Password must be longer than 6 ").isLength({ min: 6 }), // TODO доделай проверки по аналогии с регистрацией
+    check('email', "Uncorrect email.").isEmail(),
+    check('password', "Password must be longer than 6.").isLength({ min: 6 }), // TODO доделай проверки по аналогии с регистрацией
+    check('password', "Password must contain one or more Latin letters, one or more uppercase Latin letters, one or more digits, one or more special characters: !@#$%^&* .").matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}$/),
   ],
   async (req, res) => {
     try {
+      const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
+        return `${location}[${param}]: ${msg}`;
+      };
+      const errors = validationResult(req).formatWith(errorFormatter);
+      
+      if (!errors.isEmpty()) {
+        let string = errors.errors.reduce((ack, elem) => ack + elem.msg + ' ', "").slice(0, -1);
+
+        return res.status(400).json({ message: string });
+      }
+
       const { email, password } = req.body;
       const user = await Users.findOne({ email });
       if (!user) {
@@ -86,7 +98,6 @@ router.post('/login',
         }
       })
     } catch (e) {
-      console.log(e); // TODO удали это
       res.send({ message: "Server error" });
     }
   });
