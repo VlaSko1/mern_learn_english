@@ -5,7 +5,9 @@ const authRouter = require('./routes/auth.routes')
 const testRouter = require('./routes/test.routes');
 const app = express();
 const PORT = config.get('serverPort');
+const corsMiddleware = require('./middleware/cors.middleware')
 
+app.use(corsMiddleware); // мидлевар для разрешения корс политики - сервер принимает запросы с любых адресов
 app.use(express.json());
 app.use('/api/auth', authRouter);
 
