@@ -7,7 +7,7 @@ const { check, validationResult } = require('express-validator');
 const Roles = require("../models/Roles");
 const router = new Router();
 
-router.post('/registration', //TODO подправь валидацию в соответствии с валидацией на клиенте
+router.post('/registration', 
   [
     check('email', "Uncorrect email.").isEmail(),
     check('password', "Password must be longer than 6.").isLength({ min: 6 }),
@@ -59,7 +59,7 @@ router.post('/registration', //TODO подправь валидацию в со�
 router.post('/login',
   [
     check('email', "Uncorrect email.").isEmail(),
-    check('password', "Password must be longer than 6.").isLength({ min: 6 }), // TODO доделай проверки по аналогии с регистрацией
+    check('password', "Password must be longer than 6.").isLength({ min: 6 }),
     check('password', "Password must contain one or more Latin letters, one or more uppercase Latin letters, one or more digits, one or more special characters: !@#$%^&* .").matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}$/),
   ],
   async (req, res) => {

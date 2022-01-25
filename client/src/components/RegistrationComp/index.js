@@ -33,6 +33,12 @@ const RegistrationComp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const clearForm = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+  }
+
   const dispatch = useDispatch();
  
   const [isSnackErrorOpen, setIsSnackErrorOpen] = useState(false);
@@ -56,6 +62,7 @@ const RegistrationComp = () => {
     if (Boolean(messageSignUp)) {
       setTextSnackOk(messageSignUp);
       setIsSnackOkOpen(true);
+      clearForm();
     } else {
       closeSnackOk();
       setTextSnackOk('');
@@ -148,10 +155,10 @@ const RegistrationComp = () => {
         }}
       >
         <Typography align="center" variant="h6" >Регистрация</Typography>
-        <CssTextField value={name} onChange={changeName} label="name" type="text" />
-        <CssTextField value={email} onChange={changeEmail} label="email" type="email"  />
-        <CssTextField value={password} onChange={changePassword} label="password" type="password"  />
-        <Button variant="contained" onClick={registrationCheck}>Отправить</Button>
+        <CssTextField value={name} onChange={changeName} label="name" type="text" id="registr_name" />
+        <CssTextField value={email} onChange={changeEmail} label="email" type="email"  id="registr_email"/>
+        <CssTextField value={password} onChange={changePassword} label="password" type="password" id="registr_password" />
+        <Button variant="contained" onClick={registrationCheck}>Зарегистрироваться</Button>
       </Box>
       <SnackbarError
         isOpen={isSnackErrorOpen}

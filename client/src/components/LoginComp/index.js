@@ -91,8 +91,6 @@ const LoginComp = () => {
       setTextSnackError(arrayError);
       setIsSnackErrorOpen(true);
     } else {
-      // TODO доделай отправку данных на сервер
-      console.log("Данные отправлены на сервер!");
       dispatch(createSignInWithThunk(email, password));
     }
   };
@@ -111,8 +109,8 @@ const LoginComp = () => {
         }}
       >
         <Typography align="center" variant="h6" >Авторизация</Typography>
-        <CssTextField value={email} onChange={changeEmail} label="email" type="email" id="custom-css-outlined-input" />
-        <CssTextField value={password} onChange={changePassword} label="password" type="password" id="custom-css-outlined-input" />
+        <CssTextField value={email} onChange={changeEmail} label="email" type="email" id="login_email" />
+        <CssTextField value={password} onChange={changePassword} label="password" type="password" id="login_password" />
         <Button variant="contained" onClick={loginCheck}>Войти</Button>
       </Box>
       <SnackbarError
