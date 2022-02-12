@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { createLogOut } from '../../store/users';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,6 +14,7 @@ import { makeStyles } from '@mui/styles';
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import pages from '../utils/pages';
+import { getAuth} from '../../store/users';
 
 import { headerHeight } from '../utils/sizes';
 
@@ -32,7 +35,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Header = () => {
+  let isAuth = useSelector(getAuth);
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -44,7 +50,7 @@ const Header = () => {
 
 
   const classes = useStyles();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <AppBar position="static" sx={{ flexGrow: 1, height: `${headerHeight}vh`, justifyContent: 'center' }}>
       <Container maxWidth="xl" >
@@ -60,7 +66,7 @@ const Header = () => {
             Learning English words
           </Link>
 
-          <Box sx={{ flexGrow: 0, display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'none'} }}>
+          <Box sx={{ flexGrow: 0, display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -122,7 +128,7 @@ const Header = () => {
           >
             LEW
           </Link>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex'} }} className={classes.navBar}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' } }} className={classes.navBar}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -135,13 +141,24 @@ const Header = () => {
           </Box>
 
 
+          {
+            !isAuth &&
+            <>
+              <Box mr={2} sx={{ display: { xs: 'inline', md: 'flex', } }}>
+                <Button color="inherit" variant="outlined" onClick={() => { navigate('/login') }}>Log In</Button>
+              </Box>
+              <Box >
+                <Button color="secondary" variant="contained" onClick={() => { navigate('/registration') }}>Sign Up</Button>
+              </Box>
+            </>
+          }
+          {
+            isAuth &&
+            <Box sx={{ display: { xs: 'inline', md: 'flex', } }}>
+                <Button color="inherit" variant="outlined" onClick={() => { dispatch(createLogOut()); navigate('/') }}>Log Out</Button>
+            </Box>
+          }
 
-          <Box mr={2} sx={{ display: { xs: 'inline', md: 'flex', } }}>
-            <Button color="inherit" variant="outlined" onClick={() => { navigate('/login') }}>Log In</Button>
-          </Box>
-          <Box >
-            <Button color="secondary" variant="contained" onClick={() => { navigate('/registration') }}>Sign Up</Button>
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>

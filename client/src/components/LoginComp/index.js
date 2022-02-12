@@ -4,7 +4,8 @@ import { styled } from '@mui/material/styles';
 import { Button, Box, TextField, Typography } from '@mui/material';
 import { SnackbarError } from '../Snackbar';
 
-import { createSignInWithThunk, getMessageError} from '../../store/users';
+import { createSignInWithThunk, getMessageError, getAuth} from '../../store/users';
+import { useNavigate } from 'react-router-dom';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -32,6 +33,8 @@ const LoginComp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  let isAuth = useSelector(getAuth);
+  const navigate = useNavigate();
 
   const [isSnackErrorOpen, setIsSnackErrorOpen] = useState(false);
   const [textSnackError, setTextSnackError] = useState('');
@@ -94,6 +97,10 @@ const LoginComp = () => {
       dispatch(createSignInWithThunk(email, password));
     }
   };
+  
+  if (isAuth) {  
+    setTimeout(() => navigate('/'), 100);
+  }
   return (
     <>
       <Box p={1}

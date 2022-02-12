@@ -1,12 +1,14 @@
-import { login, registration } from '../../actions/user';
+import { login, registration, auth } from '../../actions/user';
 
 export const SIGN_UP = 'AUTH::SIGN_UP';
 export const LOG_IN = 'AUTH::LOG_IN';
 export const LOG_OUT = 'AUTH::LOG_OUT';
 export const SET_ERROR = 'AUTH::SET_ERROR';
 export const DEL_MESSAGE_SIGN_UP = 'AUTH::DEL_MESSAGE_SIGN_UP';
+export const AUTH_TOKEN = 'AUTH::AUTH_TOKEN';
 
-export const createSignUP = (messageServer) => ({  // TODO доделай получение данных при авторизации
+
+export const createSignUP = (messageServer) => ({
   type: SIGN_UP,
   payload: messageServer
 });
@@ -16,7 +18,7 @@ export const createLogIn = (dataUser) => ({
   payload: dataUser 
 });
 
-export const createLogOut = () => ({ // TODO реализуй выход пользователя
+export const createLogOut = () => ({
   type: LOG_OUT,
 });
 
@@ -63,5 +65,27 @@ export const createSignUpWithThunk = (name, email, password) => async (dispatch)
   } catch (error) {
     dispatch(createSetError(error.message));
     
+  }
+};
+
+export const createAuthToken = (dataUser) => ({
+  type: AUTH_TOKEN,
+  payload: dataUser
+});
+
+export const createAuthTokenWithThunk = () => async (dispatch) => {
+  try {
+    const dataUser = await auth(); 
+    if (typeof dataUser === "string") {
+      dispatch(createSetError(dataUser));
+    } else if (dataUser === undefined) {
+      return;
+    } else if ('user' in dataUser ) {
+      dispatch(createAuthToken(dataUser));
+    } else {
+      dispatch(createSetError(dataUser.message));
+    } 
+  } catch (error) {
+    dispatch(createSetError(error.message));
   }
 };

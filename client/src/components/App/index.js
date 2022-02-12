@@ -1,19 +1,15 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import RegistrationPage from '../../page/RegistrationPage';
-import LoginPage from '../../page/LoginPage';
-import MainPage from '../../page/MainPage';
-
+import React, {useEffect} from 'react';
+import { useDispatch } from 'react-redux';
+import RouteSite from '../RouteSite';
+import { createAuthTokenWithThunk } from '../../store/users';
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(createAuthTokenWithThunk());
+  }, [dispatch])
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainPage/>} />
-        <Route path="/registration" element={<RegistrationPage/>} />
-        <Route path="/login" element={<LoginPage/>} />
-      </Routes>
-    </BrowserRouter>
+    <RouteSite />
   );
 }
 

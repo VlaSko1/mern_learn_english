@@ -40,7 +40,7 @@ const RegistrationComp = () => {
   }
 
   const dispatch = useDispatch();
- 
+
   const [isSnackErrorOpen, setIsSnackErrorOpen] = useState(false);
   const [textSnackError, setTextSnackError] = useState('');
 
@@ -83,9 +83,6 @@ const RegistrationComp = () => {
   }, [messageError, closeSnackError]);
 
 
-  
-
-  
   const changeName = (event) => {
     let text = event.target.value;
     closeSnackOk();
@@ -118,7 +115,7 @@ const RegistrationComp = () => {
   };
   const registrationCheck = () => {
     closeSnackOk();
-    let nameReg = /^[\w-]{3,20}/;
+    let nameReg = /^[\w-]{3,20}$/;
     let emailReg = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
     let passwordReg = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}$/;
     const arrayError = [];
@@ -131,7 +128,7 @@ const RegistrationComp = () => {
     }
     if (!passwordReg.test(password)) {
       arrayError.push("Поле password должно содержать хотя бы одну цифру, " +
-       "хотя бы по одной латинской букве в верхнем и нижнем регистре, хотя бы один спецсимвол и не может быть менее 6 символов!");
+        "хотя бы по одной латинской букве в верхнем и нижнем регистре, хотя бы один спецсимвол и не может быть менее 6 символов!");
     }
     if (arrayError.length !== 0) {
       setTextSnackError(arrayError);
@@ -156,7 +153,7 @@ const RegistrationComp = () => {
       >
         <Typography align="center" variant="h6" >Регистрация</Typography>
         <CssTextField value={name} onChange={changeName} label="name" type="text" id="registr_name" />
-        <CssTextField value={email} onChange={changeEmail} label="email" type="email"  id="registr_email"/>
+        <CssTextField value={email} onChange={changeEmail} label="email" type="email" id="registr_email" />
         <CssTextField value={password} onChange={changePassword} label="password" type="password" id="registr_password" />
         <Button variant="contained" onClick={registrationCheck}>Зарегистрироваться</Button>
       </Box>
